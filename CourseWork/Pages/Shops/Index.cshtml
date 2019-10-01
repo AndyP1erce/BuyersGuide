@@ -1,0 +1,172 @@
+﻿@page
+@model CourseWork.Pages.Shops.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+<form class="container-fluid">
+    <div class="form-group row">
+        <label for="Search" class="col-sm-2 col-form-label">Search</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="Search" placeholder="Search">
+        </div>
+    </div>
+</form>
+<div id="k-pop"></div>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<button onclick="f()">Print</button>
+<button onclick="comeback()">Comeback</button>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Check
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].Popularity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].Property)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].Specs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Shop[0].WorkTime)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Shop)
+    {
+        <tr id="item_@item.Id">
+            <td>
+                <input name="Print" type="checkbox">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Popularity)
+            </td>
+            <td name = "shape" style="color:blue">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Property)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td name = "shape" style="color:blue">
+                @Html.DisplayFor(modelItem => item.Specs)
+            </td>
+            <td>
+                <a target="_blank" rel="noopener noreferrer" asp-route-id="@item.Id" asp-page="/Shops/Map">
+                    <img src="https://www.esquire.bg/Content/imagesdatabase/media/1.png" alt="Google Maps" height="25px" width="25px">
+                </a>
+            </td>
+            <td name = "shape" style="color:blue">
+                @Html.DisplayFor(modelItem => item.WorkTime)
+            </td>
+            <td>
+                <a class="a-link" asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="a-link" asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a class="a-link" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts
+{<script>
+     let p;
+     $($.ajax({
+         type: "GET",
+         url: "/api/Shops",
+         cache: false,
+         success: function (data) {
+             console.log(data);
+             p = data;
+         }
+     }));
+ 
+     function addSpace(s, len = 20) {
+         let count = len - s.length;
+         return count > 0 ? (''.padStart(count / 2) + s).padEnd(len) : s;
+     }
+ 
+     function f() {
+         var PrintList = $('input[type="checkbox"]');
+         var result = addSpace("Название") + '|' + addSpace("Телефон") + '|' + addSpace("Специализация") + '\r\n';
+         result += "_____________________________________________________________\r\n";
+         for (var i = 0;i < PrintList.length;i++) {
+             if (PrintList[i].checked) {
+                 result +=  addSpace(p[i].name) + '|' + addSpace(p[i].phoneNumber) + '|' + addSpace(p[i].specs) + '\r\n';
+                 result += "_____________________________________________________________\r\n";
+             }
+         }
+         console.log(result);
+         var a = document.createElement("a");
+         var file = new Blob([result], {type: 'text/plain'});
+         a.href = URL.createObjectURL(file);
+         a.download = "List.txt";
+         a.click();
+     }
+     
+     function refresh() {        
+         let search_req = $("#Search")[0].value.toLowerCase();
+         let find = new RegExp(search_req, "i");
+         for(let b of p)
+             {
+                 if (!find.test(b.name) && !find.test(b.specs)){
+                     $(`#item_${b.id}`).hide();
+                 }
+                 else
+                 {
+                     console.log(search_req);
+                     $(`#item_${b.id}`).show();
+                 }
+             }
+     }    
+     $("#Search").bind("input", refresh); 
+     
+     function Shape(action){
+         let search_req = action.target.innerText;
+         console.log(search_req);
+         let find = new RegExp(search_req, "i");
+                 for(let b of p)
+                     {
+                         if (!find.test(b.name) && !find.test(b.specs) && !find.test(b.workTime)){
+                             $(`#item_${b.id}`).hide();
+                         }
+                         else
+                         {
+                             console.log(search_req);
+                             $(`#item_${b.id}`).show();
+                         }
+                     }
+     }
+     
+         $('td[name="shape"]').bind("click", Shape); 
+     
+     function comeback() {
+         for(let b of p)
+         {
+             $(`#item_${b.id}`).show();
+         } 
+     }
+     </script>}

@@ -1,0 +1,79 @@
+﻿@page
+@model CourseWork.Pages.Shops.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Shop</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Shop.Id" />
+            <div class="form-group">
+                <label asp-for="Shop.Popularity" class="control-label"></label>
+                <input readonly asp-for="Shop.Popularity" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.Name" class="control-label"></label>
+                <input asp-for="Shop.Name" class="form-control" />
+                <span asp-validation-for="Shop.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.Property" class="control-label"></label>
+                @* <input asp-for="Shop.Property" class="form-control" /> *@
+                <span asp-validation-for="Shop.Property" class="text-danger"></span>
+                <select asp-for="Shop.Property" class="form-control">
+                    <option selected>Частная</option>
+                    <option>Государственная</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.PhoneNumber" class="control-label"></label>
+                <input type="tel" asp-for="Shop.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Shop.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.Specs" class="control-label"></label>
+                @* <input asp-for="Shop.Specs" class="form-control" /> *@
+                <span asp-validation-for="Shop.Specs" class="text-danger"></span>
+                <select asp-for="Shop.Specs" class="form-control">
+                    <option selected>
+                        Продукты
+                    </option>
+                    <option>
+                        Стройматериалы
+                    </option>
+                    <option>
+                        Товары для дома
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.Address" class="control-label"></label>
+                <input asp-for="Shop.Address" class="form-control" />
+                <span asp-validation-for="Shop.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Shop.WorkTime" class="control-label"></label>
+                <input asp-for="Shop.WorkTime" class="form-control" />
+                <span asp-validation-for="Shop.WorkTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,116 @@
+@page
+@model CourseWork.Pages.Shops.MapModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Reverse Geocoding</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        width: 350px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+      #latlng {
+        width: 225px;
+      }
+    </style>
+  </head>
+<body onload="initialize()">
+<div>
+  <input id="address" type="textbox" value="Sydney, NSW">
+  <input type="button" value="Encode" onclick="codeAddress()">
+</div>
+<div id="map" style="width: 100%; height: 100% ;"></div>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+<script>
+let k;
+     $($.ajax({
+         type: "GET",
+         url: `/api/Shops/${@Model.Shop.Id}`,
+         cache: false,
+         success: function (data) {
+             console.log(data);
+             k = data;
+             document.getElementById("address").value = k.address;
+             codeAddress();
+         }
+     }));
+// document.getElementById("address").value = "@Model.Shop.Address.ToString()";
+
+        var geocoder;
+        var map;
+        function initialize() {
+          geocoder = new google.maps.Geocoder();
+          var latlng = new google.maps.LatLng(-34.397, 150.644);
+          var mapOptions = {
+            zoom: 8,
+            center: latlng
+          }
+          map = new google.maps.Map(document.getElementById('map'), mapOptions);
+          codeAddress();          
+        }
+      
+        function codeAddress() {
+          var address = document.getElementById('address').value;
+          geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == 'OK') {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location
+              });
+            } else {
+              alert('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+
+    </script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdjzH-qo9Qwe6J3_Ry_XbInOuUXERlCms&callback=initMap">
+    </script>
+
+</body>
+</html>

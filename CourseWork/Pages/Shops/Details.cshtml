@@ -1,0 +1,55 @@
+﻿@page
+@model CourseWork.Pages.Shops.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Shop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.Property)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.Property)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.Specs)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.Specs)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.Address)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop.WorkTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Shop.WorkTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Shop.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
